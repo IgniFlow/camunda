@@ -2,228 +2,224 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ostuvy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
   <bpmn:process id="task-creation" name="Task creation" isExecutable="true">
     <bpmn:startEvent id="Event_1tblfx4">
-      <bpmn:outgoing>Flow_0gpftx9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0c4l8as</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_0gpftx9" sourceRef="Event_1tblfx4" targetRef="authenticate-user" />
-    <bpmn:serviceTask id="authenticate-user" name="Authenticate user" camunda:type="external" camunda:topic="authenticate-user">
+    <bpmn:serviceTask id="authenticate_user" name="Authenticate user" camunda:type="external" camunda:topic="authenticate_user">
       <bpmn:extensionElements />
-      <bpmn:incoming>Flow_0gpftx9</bpmn:incoming>
-      <bpmn:outgoing>Flow_007e0v7</bpmn:outgoing>
+      <bpmn:incoming>Flow_0c4l8as</bpmn:incoming>
+      <bpmn:outgoing>Flow_0l04uu9</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_1waq68t" name="Was auth successful?">
-      <bpmn:incoming>Flow_007e0v7</bpmn:incoming>
-      <bpmn:outgoing>not-authenticated</bpmn:outgoing>
-      <bpmn:outgoing>authenticated</bpmn:outgoing>
+      <bpmn:incoming>Flow_0l04uu9</bpmn:incoming>
+      <bpmn:outgoing>Flow_08tcw2z</bpmn:outgoing>
+      <bpmn:outgoing>Flow_12abrt5</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_007e0v7" sourceRef="authenticate-user" targetRef="Gateway_1waq68t" />
-    <bpmn:sequenceFlow id="not-authenticated" name="No" sourceRef="Gateway_1waq68t" targetRef="throw-error">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${authenticated == false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="throw-error" name="Throw error" camunda:type="external" camunda:topic="throw-error">
-      <bpmn:incoming>not-authenticated</bpmn:incoming>
-      <bpmn:incoming>no-workspace</bpmn:incoming>
-      <bpmn:incoming>no-team</bpmn:incoming>
-      <bpmn:incoming>not-created</bpmn:incoming>
-      <bpmn:outgoing>Flow_003x745</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="authenticated" name="Yes" sourceRef="Gateway_1waq68t" targetRef="retireve-workspace">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${authenticated == true}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="retireve-workspace" name="Retrieve user workspace" camunda:type="external" camunda:topic="retrieve-workspace">
-      <bpmn:incoming>authenticated</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ti3rk6</bpmn:outgoing>
+    <bpmn:serviceTask id="retireve_workspace" name="Retrieve user workspace" camunda:type="external" camunda:topic="retrieve_workspace">
+      <bpmn:incoming>Flow_19kxc0w</bpmn:incoming>
+      <bpmn:outgoing>Flow_1om4vpl</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_1iwexyj" name="Has workspace?">
-      <bpmn:incoming>Flow_1ti3rk6</bpmn:incoming>
-      <bpmn:outgoing>no-workspace</bpmn:outgoing>
-      <bpmn:outgoing>has-workspace</bpmn:outgoing>
+      <bpmn:incoming>Flow_1om4vpl</bpmn:incoming>
+      <bpmn:outgoing>Flow_0aej7xg</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0wb9yy4</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1ti3rk6" sourceRef="retireve-workspace" targetRef="Gateway_1iwexyj" />
-    <bpmn:sequenceFlow id="no-workspace" name="No" sourceRef="Gateway_1iwexyj" targetRef="throw-error">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${hasWorkspace == false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="has-workspace" name="Yes" sourceRef="Gateway_1iwexyj" targetRef="retrieve-team">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${hasWorkspace == true}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="retrieve-team" name="Retrieve user team" camunda:type="external" camunda:topic="retrieve-team">
-      <bpmn:incoming>has-workspace</bpmn:incoming>
-      <bpmn:outgoing>Flow_0w5uh7c</bpmn:outgoing>
+    <bpmn:serviceTask id="retrieve_team" name="Retrieve user team" camunda:type="external" camunda:topic="retrieve_team">
+      <bpmn:incoming>Flow_0zrq96d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rzt81o</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_1doi07u" name="Has team?">
-      <bpmn:incoming>Flow_0w5uh7c</bpmn:incoming>
-      <bpmn:outgoing>no-team</bpmn:outgoing>
-      <bpmn:outgoing>has-team</bpmn:outgoing>
+      <bpmn:incoming>Flow_0rzt81o</bpmn:incoming>
+      <bpmn:outgoing>Flow_0b0b4i7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0bewzso</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0w5uh7c" sourceRef="retrieve-team" targetRef="Gateway_1doi07u" />
-    <bpmn:sequenceFlow id="no-team" name="No" sourceRef="Gateway_1doi07u" targetRef="throw-error">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${hasTeam == false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="has-team" name="Yes" sourceRef="Gateway_1doi07u" targetRef="create-task">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${hasTeam == true}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="create-task" name="Create task" camunda:type="external" camunda:topic="create-task">
-      <bpmn:incoming>has-team</bpmn:incoming>
+    <bpmn:serviceTask id="create_task" name="Create task" camunda:type="external" camunda:topic="create_task">
+      <bpmn:incoming>Flow_1tgjvho</bpmn:incoming>
       <bpmn:outgoing>Flow_1eeobj0</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1eeobj0" sourceRef="create-task" targetRef="Gateway_08zdn06" />
-    <bpmn:serviceTask id="notify-user" name="Notify user" camunda:type="external" camunda:topic="notify-user">
-      <bpmn:incoming>task-created</bpmn:incoming>
-      <bpmn:outgoing>Flow_1mfga56</bpmn:outgoing>
-    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1eeobj0" sourceRef="create_task" targetRef="Event_0e3oiim" />
     <bpmn:endEvent id="Event_0e3oiim">
-      <bpmn:incoming>Flow_1mfga56</bpmn:incoming>
-      <bpmn:incoming>Flow_003x745</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1mfga56" sourceRef="notify-user" targetRef="Event_0e3oiim" />
-    <bpmn:sequenceFlow id="Flow_003x745" sourceRef="throw-error" targetRef="Event_0e3oiim" />
-    <bpmn:exclusiveGateway id="Gateway_08zdn06" name="Created successfully?">
       <bpmn:incoming>Flow_1eeobj0</bpmn:incoming>
-      <bpmn:outgoing>task-created</bpmn:outgoing>
-      <bpmn:outgoing>not-created</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="task-created" name="Yes" sourceRef="Gateway_08zdn06" targetRef="notify-user">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${taskCreated == true}</bpmn:conditionExpression>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_1q8uvw2">
+      <bpmn:incoming>Flow_08tcw2z</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:parallelGateway id="Gateway_0wuu1ul">
+      <bpmn:incoming>Flow_12abrt5</bpmn:incoming>
+      <bpmn:outgoing>Flow_19kxc0w</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0zrq96d</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gateway_1oe6fgm">
+      <bpmn:incoming>Flow_0aej7xg</bpmn:incoming>
+      <bpmn:incoming>Flow_0b0b4i7</bpmn:incoming>
+      <bpmn:outgoing>Flow_117bd0z</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gateway_0og5fzi">
+      <bpmn:incoming>Flow_0wb9yy4</bpmn:incoming>
+      <bpmn:incoming>Flow_0bewzso</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tgjvho</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_0c4l8as" sourceRef="Event_1tblfx4" targetRef="authenticate_user" />
+    <bpmn:sequenceFlow id="Flow_0l04uu9" sourceRef="authenticate_user" targetRef="Gateway_1waq68t" />
+    <bpmn:sequenceFlow id="Flow_08tcw2z" name="No" sourceRef="Gateway_1waq68t" targetRef="Event_1q8uvw2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${authenticated == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="not-created" name="No" sourceRef="Gateway_08zdn06" targetRef="throw-error">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${taskCreated == false}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_12abrt5" name="Yes" sourceRef="Gateway_1waq68t" targetRef="Gateway_0wuu1ul">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${authenticated == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_19kxc0w" sourceRef="Gateway_0wuu1ul" targetRef="retireve_workspace" />
+    <bpmn:sequenceFlow id="Flow_0zrq96d" sourceRef="Gateway_0wuu1ul" targetRef="retrieve_team" />
+    <bpmn:sequenceFlow id="Flow_0rzt81o" sourceRef="retrieve_team" targetRef="Gateway_1doi07u" />
+    <bpmn:sequenceFlow id="Flow_1om4vpl" sourceRef="retireve_workspace" targetRef="Gateway_1iwexyj" />
+    <bpmn:sequenceFlow id="Flow_0aej7xg" name="No" sourceRef="Gateway_1iwexyj" targetRef="Gateway_1oe6fgm">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${has_workspace == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0b0b4i7" name="No" sourceRef="Gateway_1doi07u" targetRef="Gateway_1oe6fgm">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${has_team == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1tgjvho" sourceRef="Gateway_0og5fzi" targetRef="create_task" />
+    <bpmn:sequenceFlow id="Flow_0wb9yy4" name="Yes" sourceRef="Gateway_1iwexyj" targetRef="Gateway_0og5fzi">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${has_workspace == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0bewzso" name="Yes" sourceRef="Gateway_1doi07u" targetRef="Gateway_0og5fzi">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${has_team == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_07stieb">
+      <bpmn:incoming>Flow_117bd0z</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_117bd0z" sourceRef="Gateway_1oe6fgm" targetRef="Event_07stieb" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="task-creation">
       <bpmndi:BPMNShape id="Event_1tblfx4_di" bpmnElement="Event_1tblfx4">
-        <dc:Bounds x="152" y="122" width="36" height="36" />
+        <dc:Bounds x="152" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_09vmzza_di" bpmnElement="authenticate-user">
-        <dc:Bounds x="250" y="100" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_09vmzza_di" bpmnElement="authenticate_user">
+        <dc:Bounds x="250" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1waq68t_di" bpmnElement="Gateway_1waq68t" isMarkerVisible="true">
-        <dc:Bounds x="385" y="115" width="50" height="50" />
+        <dc:Bounds x="395" y="205" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="383" y="85" width="58" height="27" />
+          <dc:Bounds x="391" y="176" width="58" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ue58hf_di" bpmnElement="throw-error">
-        <dc:Bounds x="800" y="100" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0f3kybw_di" bpmnElement="retireve-workspace">
-        <dc:Bounds x="450" y="210" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0f3kybw_di" bpmnElement="retireve_workspace">
+        <dc:Bounds x="510" y="290" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1iwexyj_di" bpmnElement="Gateway_1iwexyj" isMarkerVisible="true">
-        <dc:Bounds x="585" y="225" width="50" height="50" />
+        <dc:Bounds x="715" y="305" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="571" y="282" width="82" height="14" />
+          <dc:Bounds x="699" y="365" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pmqhzz_di" bpmnElement="retrieve-team">
-        <dc:Bounds x="680" y="210" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0pmqhzz_di" bpmnElement="retrieve_team">
+        <dc:Bounds x="520" y="90" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1doi07u_di" bpmnElement="Gateway_1doi07u" isMarkerVisible="true">
-        <dc:Bounds x="825" y="225" width="50" height="50" />
+        <dc:Bounds x="715" y="105" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="823" y="282" width="54" height="14" />
+          <dc:Bounds x="713" y="83" width="54" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pwfdim_di" bpmnElement="create-task">
-        <dc:Bounds x="920" y="210" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_08zdn06_di" bpmnElement="Gateway_08zdn06" isMarkerVisible="true">
-        <dc:Bounds x="1065" y="225" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1057" y="282" width="66" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1h05xce_di" bpmnElement="notify-user">
-        <dc:Bounds x="1160" y="210" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0pwfdim_di" bpmnElement="create_task">
+        <dc:Bounds x="990" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0e3oiim_di" bpmnElement="Event_0e3oiim">
-        <dc:Bounds x="1192" y="122" width="36" height="36" />
+        <dc:Bounds x="1152" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0gpftx9_di" bpmnElement="Flow_0gpftx9">
-        <di:waypoint x="188" y="140" />
-        <di:waypoint x="250" y="140" />
+      <bpmndi:BPMNShape id="Event_1q8uvw2_di" bpmnElement="Event_1q8uvw2">
+        <dc:Bounds x="402" y="322" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0wuu1ul_di" bpmnElement="Gateway_0wuu1ul">
+        <dc:Bounds x="535" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1u74nv5_di" bpmnElement="Gateway_1oe6fgm">
+        <dc:Bounds x="715" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0287far_di" bpmnElement="Gateway_0og5fzi">
+        <dc:Bounds x="885" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07stieb_di" bpmnElement="Event_07stieb">
+        <dc:Bounds x="822" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0c4l8as_di" bpmnElement="Flow_0c4l8as">
+        <di:waypoint x="188" y="230" />
+        <di:waypoint x="250" y="230" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_007e0v7_di" bpmnElement="Flow_007e0v7">
-        <di:waypoint x="350" y="140" />
-        <di:waypoint x="385" y="140" />
+      <bpmndi:BPMNEdge id="Flow_0l04uu9_di" bpmnElement="Flow_0l04uu9">
+        <di:waypoint x="350" y="230" />
+        <di:waypoint x="395" y="230" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1pdwn0b_di" bpmnElement="not-authenticated">
-        <di:waypoint x="435" y="140" />
-        <di:waypoint x="800" y="140" />
+      <bpmndi:BPMNEdge id="Flow_08tcw2z_di" bpmnElement="Flow_08tcw2z">
+        <di:waypoint x="420" y="255" />
+        <di:waypoint x="420" y="322" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="610" y="122" width="15" height="14" />
+          <dc:Bounds x="428" y="277" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0bbokb3_di" bpmnElement="authenticated">
-        <di:waypoint x="410" y="165" />
-        <di:waypoint x="410" y="250" />
-        <di:waypoint x="450" y="250" />
+      <bpmndi:BPMNEdge id="Flow_12abrt5_di" bpmnElement="Flow_12abrt5">
+        <di:waypoint x="445" y="230" />
+        <di:waypoint x="535" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="416" y="205" width="19" height="14" />
+          <dc:Bounds x="481" y="212" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ti3rk6_di" bpmnElement="Flow_1ti3rk6">
-        <di:waypoint x="550" y="250" />
-        <di:waypoint x="585" y="250" />
+      <bpmndi:BPMNEdge id="Flow_19kxc0w_di" bpmnElement="Flow_19kxc0w">
+        <di:waypoint x="560" y="255" />
+        <di:waypoint x="560" y="290" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0n01znr_di" bpmnElement="no-workspace">
-        <di:waypoint x="610" y="225" />
-        <di:waypoint x="610" y="170" />
-        <di:waypoint x="800" y="170" />
+      <bpmndi:BPMNEdge id="Flow_1om4vpl_di" bpmnElement="Flow_1om4vpl">
+        <di:waypoint x="610" y="330" />
+        <di:waypoint x="715" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0aej7xg_di" bpmnElement="Flow_0aej7xg">
+        <di:waypoint x="740" y="305" />
+        <di:waypoint x="740" y="255" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="680" y="180" width="15" height="14" />
+          <dc:Bounds x="748" y="277" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1wcksij_di" bpmnElement="has-workspace">
-        <di:waypoint x="635" y="250" />
-        <di:waypoint x="680" y="250" />
+      <bpmndi:BPMNEdge id="Flow_0wb9yy4_di" bpmnElement="Flow_0wb9yy4">
+        <di:waypoint x="765" y="330" />
+        <di:waypoint x="910" y="330" />
+        <di:waypoint x="910" y="255" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="648" y="232" width="19" height="14" />
+          <dc:Bounds x="828" y="312" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0w5uh7c_di" bpmnElement="Flow_0w5uh7c">
-        <di:waypoint x="780" y="250" />
-        <di:waypoint x="825" y="250" />
+      <bpmndi:BPMNEdge id="Flow_0zrq96d_di" bpmnElement="Flow_0zrq96d">
+        <di:waypoint x="560" y="205" />
+        <di:waypoint x="560" y="170" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0d73zef_di" bpmnElement="no-team">
-        <di:waypoint x="850" y="225" />
-        <di:waypoint x="850" y="180" />
+      <bpmndi:BPMNEdge id="Flow_0rzt81o_di" bpmnElement="Flow_0rzt81o">
+        <di:waypoint x="620" y="130" />
+        <di:waypoint x="715" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b0b4i7_di" bpmnElement="Flow_0b0b4i7">
+        <di:waypoint x="740" y="155" />
+        <di:waypoint x="740" y="205" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="858" y="199" width="15" height="14" />
+          <dc:Bounds x="748" y="177" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_07v4mks_di" bpmnElement="has-team">
-        <di:waypoint x="875" y="250" />
-        <di:waypoint x="920" y="250" />
+      <bpmndi:BPMNEdge id="Flow_0bewzso_di" bpmnElement="Flow_0bewzso">
+        <di:waypoint x="765" y="130" />
+        <di:waypoint x="910" y="130" />
+        <di:waypoint x="910" y="205" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="888" y="232" width="19" height="14" />
+          <dc:Bounds x="828" y="112" width="19" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tgjvho_di" bpmnElement="Flow_1tgjvho">
+        <di:waypoint x="935" y="230" />
+        <di:waypoint x="990" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1eeobj0_di" bpmnElement="Flow_1eeobj0">
-        <di:waypoint x="1020" y="250" />
-        <di:waypoint x="1065" y="250" />
+        <di:waypoint x="1090" y="230" />
+        <di:waypoint x="1152" y="230" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1mfga56_di" bpmnElement="Flow_1mfga56">
-        <di:waypoint x="1210" y="210" />
-        <di:waypoint x="1210" y="158" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_003x745_di" bpmnElement="Flow_003x745">
-        <di:waypoint x="900" y="140" />
-        <di:waypoint x="1192" y="140" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0kqgnyf_di" bpmnElement="task-created">
-        <di:waypoint x="1115" y="250" />
-        <di:waypoint x="1160" y="250" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1129" y="232" width="19" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19ryowy_di" bpmnElement="not-created">
-        <di:waypoint x="1090" y="225" />
-        <di:waypoint x="1090" y="170" />
-        <di:waypoint x="900" y="170" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1098" y="195" width="15" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_117bd0z_di" bpmnElement="Flow_117bd0z">
+        <di:waypoint x="765" y="230" />
+        <di:waypoint x="822" y="230" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
