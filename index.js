@@ -150,6 +150,7 @@ client.subscribe('create_task', async function ({ task, taskService }) {
     const workspaceId = task.variables.get('workspace_id');
     const teamId = task.variables.get('team_id');
     const userId = task.variables.get('user_id');
+    const documentId = task.variables.get('document_id');
 
     const taskTitle = task.variables.get('task_title');
     const taskDescription = task.variables.get('task_description');
@@ -157,7 +158,7 @@ client.subscribe('create_task', async function ({ task, taskService }) {
 
     const variables = new Variables();
 
-    if (!taskTitle || !taskDescription || !taskColumn) {
+    if (!taskColumn) {
         console.log('Missing task data');
 
         variables.setAll({
@@ -166,13 +167,18 @@ client.subscribe('create_task', async function ({ task, taskService }) {
         });
     } else {
         // Create task in firestore
-        await firestore.collection('documents').doc().set({
+        await firestore.collection('documents').add({
+            workspaceId,
+            documentId,
+            type: 'item',
+            views: null,
             title: taskTitle,
-            description: taskDescription,
-            status: taskColumn,
+            content: taskDescription,
             ownerId: userId,
-            workspaceId: workspaceId,
-            teamId: teamId,
+            properties: {
+                status: taskColumn,
+                assignee: [],
+            },
         });
 
         // Task created
